@@ -1,0 +1,30 @@
+//Тест на регистрационную форму сайта.
+//Значения и инпуты могут меняться в зависимости от необходимости.
+from selenium import webdriver
+import time
+
+
+//Здесь ссылка на сайт
+link = ""
+
+//Запускаем браузер
+try:
+    browser = webdriver.Chrome()
+    browser.get(link)
+
+//Находим нужный импорт и вводим необходимые данные.
+    input1 = browser.find_element_by_tag_name("input")
+    input1.send_keys("Имя")
+    input2 = browser.find_element_by_name("last_name")
+    input2.send_keys("Фамилия")
+    input3 = browser.find_element_by_class_name("form-control.city")
+    input3.send_keys("Город")
+    input4 = browser.find_element_by_id("country")
+    input4.send_keys("Страна")
+    submit_button = browser.find_element_by_xpath("")//Обнаружение сабмита
+    submit_button.click()
+
+finally:
+    time.sleep(30)
+    browser.quit()
+//Закрытие браузера
