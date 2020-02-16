@@ -1,0 +1,112 @@
+import pygame
+
+def inter (x1, y1, x2, y2, db1, db2):
+    if x1>x2-db1 and x1<x2+db2 and y1>y2-db1 and y1<y2+db2:
+        return 1
+    else:
+        return 0
+
+pygame.init()
+
+window = pygame.display.set_mode((400, 400))
+
+screen = pygame.Surface((400, 400))
+
+background_position = [0, 0]
+
+background_image = pygame.image.load("bg.png").convert()
+
+player = pygame.Surface((40, 40))
+
+zet = pygame.Surface ((43, 40))
+
+arrow = pygame.Surface ((30, 26))
+
+count = 0
+
+file = 'sound.mp3'
+pygame.mixer.init()
+pygame.mixer.music.load(file)
+pygame.mixer.music.play(-1)
+
+player.set_colorkey(0, 0)
+zet.set_colorkey(0, 0)
+arrow.set_colorkey(0, 0)
+
+img_p = pygame.image.load('p.png')
+img_z = pygame.image.load('z.png')
+img_a = pygame.image.load('a.png')
+
+myfont = pygame.font.SysFont('monospace', 15)
+
+a_x = 1000
+a_y = 1000
+
+strike = False
+
+x_z = 0
+y_z = 0
+
+
+x_p = 0
+y_p = 360
+
+right = True
+
+done = False
+
+while done == False:
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            done = True
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_s:
+            y_p += 10
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_w:
+            y_p -= 10
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
+            x_p -= 10
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_d:
+            x_p += 10
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_f:
+            if strike == False:
+                strike = True
+                a_x = x_p
+                a_y = y_p - 40
+                
+    if strike:
+        a_y -= 0.5
+        if a_y <0:
+            strike = False
+            a_y = 1000
+            a_x = 1000
+    
+    if inter(a_x, a_y, x_z, y_z, 20, 40):
+        count += 1
+        strike = False
+        a_y = 1000
+        a_x = 1000
+            
+    if right:
+        x_z += 1
+        if x_z > 400:
+            x_z -= 1
+            right = False
+    else: 
+        x_z -= 1
+        if x_z < 0:
+            x_z += 1
+            right = True
+            
+    string = myfont.render('Счет:' + str(count), 0, (255, 0, 0))        
+    screen.fill((123,255,1))
+    arrow.blit(img_a, (0, 0))
+    zet.blit(img_z, (0, 0))
+    player.blit(img_p, (0, 0))
+    screen.blit(string, (0, 50))
+    screen.blit(arrow, (a_x, a_y))
+    screen.blit(zet, (x_z, y_z))
+    screen.blit(player, (x_p, y_p))
+    window.blit(screen, (0, 0))
+    pygame.display.update()
+    
+pygame.quit()
